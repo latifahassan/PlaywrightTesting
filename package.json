@@ -1,0 +1,15 @@
+{
+  "name": "playwrighttesting",
+  "version": "1.0.0",
+  "description": "## Overview This repository contains a Playwright script that automates the process of adding two products to the basket on the Huel website (https://huel.com/). The script is written in JavaScript and follows the requirements provided in the tech test.",
+  "main": "playwright_huel_add_to_cart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.43.0"
+  }
+}

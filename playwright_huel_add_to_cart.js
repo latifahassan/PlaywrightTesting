@@ -1,35 +1,35 @@
 // playwright_huel_add_to_cart.js
 const { chromium } = require('playwright');
-
+ 
 // Define product names and flavours
-const product1 = "Huel Instant Meal Pots";
-const product2 = "Huel Complete Nutrition Bar";
-const flavour2 = "Huel Ready-to-drink";
-
-// Helper function to wait for a specific text to appear on the page
-async function waitForText(page, text) {
-  await page.waitForSelector(`text="${text}"`);
-}
+const product1 = "Huel Daily Greens";
+const product2 = "Huel Instant Meals";
+const flavour2 = "Mexican Chilli";
 
 // Launch the browser and navigate to the Huel homepage
 (async () => {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-  await page.goto('https://huel.com/');
-
-  // Search for the first product
-  await page.click('text="Search"');
-  await page.fill('input[placeholder="Search products..."]', product1);
-  await page.press('input[placeholder="Search products..."]', 'Enter');
-  await waitForText(page, product1);
-
-  // Add the first product to the cart
-  try {
-    await page.click('button:has-text("Add to Basket")');
-    await waitForText(page, "Basket");
-  } catch (e) {
-    console.error(`Error adding ${product1} to cart: ${e}`);
-  }
+    const browser = await chromium.launch({ headless: false });
+    const page = await browser.newPage();
+    await page.goto('https://huel.com/');
+  
+    // Search for the first product
+    await page.waitForSelector('button[data-testid="IconLink-Search"]', { visible: true });
+    await page.click('button[data-testid="IconLink-Search"]');
+    await page.waitForSelector('input[data-testid="SearchBar__input"]', { visible: true });
+    await page.fill('input[data-testid="SearchBar__input"]', product1);
+    await page.keyboard.press('Enter');
+  
+    // Wait for the Daily Greens product image to be visible and click on it
+    await page.waitForSelector('img[alt="Product Image"]', { visible: true });
+    await page.click('img[alt="Product Image"]');
+  
+    // Wait for the "Shop Daily Greens" button to be visible and click on it
+    await page.waitForSelector('a.button', { visible: true });
+    await page.click('a.button');
+  
+    // Wait for the "ADD TO CART" button to be visible and click on it
+    await page.waitForSelector('huel-button.VariantsPurchaseForm__purchase-button', { visible: true });
+    await page.click('huel-button.VariantsPurchaseForm__purchase-button');
 
   // Search for the second product
   await page.click('text="Search"');
