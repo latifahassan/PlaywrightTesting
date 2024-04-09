@@ -13,14 +13,10 @@ This repository contains a Playwright script that automates the process of addin
 - Add the second product to the basket
 - Verify that at least two items are present in the basket
 
-## Bonus Features
-- Error handling for scenarios where adding a product to the cart fails
-- Detailed comments explaining each step of the automation process
-
 ## Approach and Planning
 
 ### 1. Understanding the Requirements
-I carefully read and analyzed the requirements provided in the tech test description. I broke down the task into smaller, actionable steps to plan my approach.
+I carefully read and analysed the requirements provided in the tech test description. I broke down the task into smaller, actionable steps to plan my approach.
 
 ### 2. Setting up the Development Environment
 - Installed Node.js and npm (Node Package Manager)
