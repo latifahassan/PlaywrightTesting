@@ -15,7 +15,7 @@ const flavour2 = "Mexican Chilli";
     // Search for the first product
     await page.waitForSelector('button[data-testid="IconLink-Search"]', { visible: true });
     await page.click('button[data-testid="IconLink-Search"]');
-    await page.waitForSelector('input[data-testid="SearchBar__input"]', { visible: true });
+    await page.waitForSelector('input[data-testid="SearchBar__input"]', { visible: true, timeout: 10000 });
     await page.fill('input[data-testid="SearchBar__input"]', product1);
     await page.keyboard.press('Enter');
   
@@ -30,29 +30,51 @@ const flavour2 = "Mexican Chilli";
     // Wait for the "ADD TO CART" button to be visible and click on it
     await page.waitForSelector('huel-button.VariantsPurchaseForm__purchase-button', { visible: true });
     await page.click('huel-button.VariantsPurchaseForm__purchase-button');
+    
+// Search for the second product
+await page.waitForSelector('button[data-testid="IconLink-Search"]', { visible: true });
+await page.click('button[data-testid="IconLink-Search"]');
+await page.waitForSelector('input[data-testid="SearchBar__input"]', { visible: true, timeout: 10000 });
+await page.fill('input[data-testid="SearchBar__input"]', product2);
+await page.keyboard.press('Enter');
 
-  // Search for the second product
-  await page.click('text="Search"');
-  await page.fill('input[placeholder="Search products..."]', product2);
-  await page.press('input[placeholder="Search products..."]', 'Enter');
-  await waitForText(page, product2);
+// Wait for navigation to complete
+await page.waitForNavigation();
 
-  // Select the desired flavour
-  try {
-    await page.click(`text="${flavour2}"`);
-    await page.click('button:has-text("Add to Basket")');
-    await waitForText(page, "Basket");
-  } catch (e) {
-    console.error(`Error adding ${product2} (${flavour2}) to cart: ${e}`);
-  }
+// Wait for the image of the "Shop Instant Meal Pouches" and click on it
+await page.waitForSelector('img[alt="Product Image"][src="https://huel.imgix.net/H&S%20final.png"]');
+await page.click('img[alt="Product Image"][src="https://huel.imgix.net/H&S%20final.png"]');
 
-  // Verify that at least two items are present in the basket
-  const basketCount = await page.textContent('span[data-basket-count]');
-  const count = parseInt(basketCount.match(/\d+/)[0]);
-  if (count >= 2) {
-    console.log("Success! At least two items were added to the basket.");
-  } else {
-    console.error(`Error: Only ${count} item(s) in the basket.`);
-  }
-  await browser.close();
+// Wait for the flavour picker to be visible
+await page.waitForSelector('div.FlavourPicker__left-side');
+await page.waitForTimeout(2000); // Add a delay of 2 seconds
+
+// Click on the flavour picker
+await page.click('div.FlavourPicker__left-side');
+
+// Wait for the specific flavour button to be visible
+await page.waitForSelector(`button[aria-label="${flavour2} Increase Quantity"]`);
+await page.waitForTimeout(2000); // Add a delay of 2 seconds
+
+// Click on the "+" button associated with the specified flavour
+await page.click(`button[aria-label="${flavour2} Increase Quantity"]`);
+
+// Wait for the "Continue" button and click on it
+await page.waitForSelector('huel-button.hydrated');
+await page.click('huel-button.hydrated');
+
+// Wait for the "Continue" button on the next page and click on it
+await page.waitForSelector('nav[data-testid="StepsNav"]');
+await page.click('huel-button.hydrated');;
+
+// Verify there are two products in the cart
+const basketCount = await page.textContent('span[data-basket-count]');
+const count = parseInt(basketCount.match(/\d+/)[0]);
+if (count === 2) {
+    console.log("Success! Two items were added to the basket.");
+} else {
+    console.error(`Error: ${count} item(s) in the basket.`);
+}
+
+await browser.close();
 })();
