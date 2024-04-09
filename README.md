@@ -38,6 +38,10 @@ I broke down the automation process into the following steps:
 - Add the second product to the basket
 - Verify that at least two items are present in the basket
 
+## Bonus Features
+- Error handling for scenarios where overlay elements cover the element you trying to access (e.g modals/popups)
+- Detailed comments explaining each step of the automation process
+
 ### 5. Writing the Automation Script
 I created a new JavaScript file (`playwright_huel_add_to_cart.js`) and implemented the automation flow using Playwright's methods (`click`, `fill`, `press`, etc.). I also defined helper functions and constants for better code organization and readability.
 
