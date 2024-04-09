@@ -5,18 +5,53 @@ const product1 = "Huel Daily Greens"; // Variable to store the name of the first
 const product2 = "Huel Instant Meals"; // Variable to store the name of the second product
 const flavour2 = "Mexican Chilli"; // Variable to store the name of the second product's flavour
 
-// Launch the browser and navigate to the Huel homepage
+// Function to accept the cookies popup if present
+async function acceptCookiesPopup(page) {
+    let popupFound = false;
+
+    // Keep checking for the cookies popup at regular intervals
+    const interval = setInterval(async () => {
+        try {
+            if (!popupFound) {
+                // Check if the cookies popup is present
+                await page.waitForSelector('div[aria-label="Privacy"][role="alertdialog"]', { timeout: 2000 });
+
+                // If found, click on the "Accept" button for cookies
+                await page.click('button#onetrust-accept-btn-handler');
+                console.log("Clicked on the 'Accept' button for cookies.");
+                popupFound = true;
+            }
+        } catch (error) {
+            // If the cookies popup is not found within the timeout, log a message
+            console.log("No cookies popup found within the timeout.");
+        }
+    }, 5000); // Check every 5 seconds
+
+    // Stop checking for the popup after 60 seconds
+    setTimeout(() => {
+        clearInterval(interval);
+    }, 60000);
+}
+
+// Launch the browser and handle cookies popup
 (async () => {
-    const browser = await chromium.launch({ headless: false }); // Launching the Chromium browser
-    const page = await browser.newPage(); // Creating a new browser page
-    await page.goto('https://huel.com/'); // Navigating to the Huel homepage
-  
+    const { chromium } = require('playwright');
+
+    const browser = await chromium.launch({ headless: false });
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    await acceptCookiesPopup(page); // Handle cookies popup
+
+    await page.goto('https://huel.com/');
+
     // Search for the first product
     await page.waitForSelector('button[data-testid="IconLink-Search"]', { visible: true }); // Waiting for the search button to be visible
     await page.click('button[data-testid="IconLink-Search"]'); // Clicking on the search button
     await page.waitForSelector('input[data-testid="SearchBar__input"]', { visible: true, timeout: 10000 }); // Waiting for the search input field to be visible
     await page.fill('input[data-testid="SearchBar__input"]', product1); // Entering the name of the first product in the search field
     await page.keyboard.press('Enter'); // Pressing the Enter key to start the search
+
   
     // Wait for the Daily Greens product image to be visible and click on it
     await page.waitForSelector('img[alt="Product Image"]', { visible: true }); // Waiting for the product image to be visible
