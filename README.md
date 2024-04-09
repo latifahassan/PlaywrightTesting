@@ -9,7 +9,7 @@ This repository contains a Playwright script that automates the process of addin
 - Search for a specific product (e.g., "Huel Instant Meal Pots")
 - Add the searched product to the basket
 - Search for a second product (e.g., "Huel Complete Nutrition Bar")
-- Select a desired flavor for the second product (e.g., "Huel Ready-to-drink")
+- Select a desired flavor for the second product (e.g., "Mexican Chilli")
 - Add the second product to the basket
 - Verify that at least two items are present in the basket
 
